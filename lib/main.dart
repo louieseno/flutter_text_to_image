@@ -49,9 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
               RepaintBoundary(
                 key: _globalKey,
                 child: Container(
-                  width: 200,
-                  height: 200,
-                  color: Colors.red,
+                  color: Colors.amberAccent,
+                  child: Text(
+                    'SAMPLE POST',
+                    style: TextStyle(fontSize: 200),
+                  ),
                 ),
               ),
               Container(
