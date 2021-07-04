@@ -1,6 +1,6 @@
-# text_to_image
+# flutter_text_to_image
 
-Convert text to image
+Flutter app that simply converts user input text to image.
 
 ## Getting Started
 
