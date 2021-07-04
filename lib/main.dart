@@ -52,15 +52,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.amberAccent,
                   child: Text(
                     'SAMPLE POST',
-                    style: TextStyle(fontSize: 200),
+                    style: TextStyle(fontSize: 150),
                   ),
                 ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 15),
-                child: RaisedButton(
+                child: ElevatedButton(
                   onPressed: _saveScreen,
-                  child: Text("Save Local Image"),
+                  child: Text("Save Image to Device"),
                 ),
                 width: 200,
                 height: 44,
