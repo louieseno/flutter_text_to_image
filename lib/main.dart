@@ -29,11 +29,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   GlobalKey _globalKey = GlobalKey();
+  late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
-
+    _controller = TextEditingController();
+    _controller.text = 'こんにちは世界';
     _requestPermission();
   }
 
@@ -41,36 +43,55 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Save image to gallery"),
+          title: Text("Mobile Slab"),
         ),
         body: Center(
-          child: Column(
+          child: ListView(
             children: <Widget>[
               RepaintBoundary(
-                key: _globalKey,
-                child: Container(
-                  color: Colors.amberAccent,
+                  key: _globalKey,
+                  child: Center(
+                    child: Container(
+                      color: Colors.amberAccent,
+                      width: double.infinity,
+                      height: 450.0,
+                      child: Text(
+                        _controller.text,
+                        style: TextStyle(fontSize: 50),
+                      ),
+                    ),
+                  )),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 400.0),
+                child: ElevatedButton(
+                  onPressed: _saveScreen,
                   child: Text(
-                    'SAMPLE POST',
-                    style: TextStyle(fontSize: 150),
+                    "Save Image to Device",
+                    style: TextStyle(fontSize: 20.0),
                   ),
                 ),
               ),
-              Container(
-                padding: EdgeInsets.only(top: 15),
-                child: ElevatedButton(
-                  onPressed: _saveScreen,
-                  child: Text("Save Image to Device"),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Hint Text',
+                    border: OutlineInputBorder(),
+                  ),
+                  controller: _controller,
+                  maxLines: null,
+                  keyboardType: TextInputType.multiline,
+                  onChanged: (value) {
+                    setState(() {});
+                  },
                 ),
-                width: 200,
-                height: 44,
-              ),
+              )
             ],
           ),
         ));
   }
 
-  _requestPermission() async {
+  void _requestPermission() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.storage,
     ].request();
@@ -79,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print(info);
   }
 
-  _saveScreen() async {
+  void _saveScreen() async {
     RenderRepaintBoundary boundary =
         _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage();
@@ -87,7 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
     if (byteData != null) {
       final result =
           await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
-      print(result);
+//      if(result['isSuccess']) {
+//
+//      }
     }
   }
 }
