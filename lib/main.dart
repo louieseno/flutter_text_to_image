@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:text_to_image/widgets/color_picker.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,13 +29,14 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   GlobalKey _globalKey = GlobalKey();
+  Color _colorScheme = Colors.amber;
   late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    _controller.text = 'こんにちは世界';
+    _controller.text = 'Enter Message Here';
     _requestPermission();
   }
 
@@ -52,24 +53,35 @@ class _MyHomePageState extends State<MyHomePage> {
                   key: _globalKey,
                   child: Center(
                     child: Container(
-                      color: Colors.amberAccent,
+                      color: _colorScheme,
                       width: double.infinity,
-                      height: 450.0,
+                      height: MediaQuery.of(context).size.height / 2,
                       child: Text(
                         _controller.text,
-                        style: TextStyle(fontSize: 50),
+                        style: TextStyle(fontSize: 50, color: Colors.white),
                       ),
                     ),
                   )),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 400.0),
-                child: ElevatedButton(
-                  onPressed: _saveScreen,
-                  child: Text(
-                    "Save Image to Device",
-                    style: TextStyle(fontSize: 20.0),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 30),
+                padding: const EdgeInsets.all(8.0),
+                child: Align(
+                  child: ElevatedButton(
+                    onPressed: _saveScreen,
+                    child: Text(
+                      "Save Image to Device",
+                      style: TextStyle(fontSize: 20.0),
+                    ),
                   ),
                 ),
+              ),
+              ColorPickerController(
+                color: _colorScheme,
+                onChange: (value) {
+                  setState(() {
+                    _colorScheme = value;
+                  });
+                },
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -100,17 +112,29 @@ class _MyHomePageState extends State<MyHomePage> {
     print(info);
   }
 
+  void _showSnackBar(content) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(content)));
+  }
+
   void _saveScreen() async {
-    RenderRepaintBoundary boundary =
-        _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-    ui.Image image = await boundary.toImage();
-    ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    if (byteData != null) {
-      final result =
-          await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
-//      if(result['isSuccess']) {
-//
-//      }
+    try {
+      RenderRepaintBoundary boundary = _globalKey.currentContext!
+          .findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage();
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
+      if (byteData != null) {
+        final result =
+            await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
+        if (result['isSuccess']) {
+          _showSnackBar('Image save!');
+        } else {
+          _showSnackBar('Image failed to save!');
+        }
+      }
+    } catch (err) {
+      _showSnackBar(err.toString());
     }
   }
 }
