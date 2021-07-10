@@ -1,27 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 
-class ColorPickerController extends StatefulWidget {
+class ColorPickerController extends StatelessWidget {
   ColorPickerController({
     required this.color,
     required this.onChange,
   });
   final Color color;
   final Function onChange;
-
-  @override
-  _ColorPickerControllerState createState() => _ColorPickerControllerState();
-}
-
-class _ColorPickerControllerState extends State<ColorPickerController> {
-  late Color dialogPickerColor; //
-
-  @override
-  void initState() {
-    dialogPickerColor = widget.color;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -32,14 +18,13 @@ class _ColorPickerControllerState extends State<ColorPickerController> {
         GestureDetector(
           onTap: () => _showColorPickerDialog(
             context,
-            dialogPickerColor,
+            color,
             (color) {
-              dialogPickerColor = Color(color.value);
-              widget.onChange(Color(color.value));
+              onChange(Color(color.value));
             },
           ),
           child: ColorIndicator(
-            color: dialogPickerColor,
+            color: color,
           ),
         ),
       ],

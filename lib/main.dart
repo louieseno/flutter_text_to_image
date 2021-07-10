@@ -58,7 +58,11 @@ class _MyHomePageState extends State<MyHomePage> {
                       height: MediaQuery.of(context).size.height * 0.3,
                       child: Text(
                         _controller.text,
-                        style: TextStyle(fontSize: 50, color: Colors.white),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Squealer',
+                          fontSize: 50,
+                        ),
                       ),
                     ),
                   )),
@@ -75,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
+              // Image Decorators
               ColorPickerController(
                 color: _colorScheme,
                 onChange: (value) {
@@ -83,6 +88,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 },
               ),
+
+              // Input
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
