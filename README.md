@@ -3,4 +3,4 @@
 Flutter app that simply converts user input text to typographic poster.
 
 ## Demo
-![](live-demo.gif)
+![](app-demo.gif)
