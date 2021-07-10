@@ -19,6 +19,7 @@ class FontPickerController extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: DropdownButton(
+        onTap: () => FocusScope.of(context).unfocus(),
         hint: _textChild(font), // Not necessary for Option 1
         value: font,
         onChanged: (newValue) => onChange(newValue),
