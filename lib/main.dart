@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Container(
                       color: _colorScheme,
                       width: double.infinity,
-                      height: MediaQuery.of(context).size.height / 2,
+                      height: MediaQuery.of(context).size.height * 0.3,
                       child: Text(
                         _controller.text,
                         style: TextStyle(fontSize: 50, color: Colors.white),

@@ -32,6 +32,7 @@ class _ColorPickerControllerState extends State<ColorPickerController> {
         GestureDetector(
           onTap: () => _showColorPickerDialog(
             context,
+            dialogPickerColor,
             (color) {
               dialogPickerColor = Color(color.value);
               widget.onChange(Color(color.value));
@@ -46,6 +47,8 @@ class _ColorPickerControllerState extends State<ColorPickerController> {
   }
 }
 
-void _showColorPickerDialog(BuildContext context, Function(Color) onChanged) {
-  ColorPicker(onColorChanged: onChanged).showPickerDialog(context);
+void _showColorPickerDialog(
+    BuildContext context, Color color, Function(Color) onChanged) {
+  ColorPicker(color: color, onColorChanged: onChanged)
+      .showPickerDialog(context);
 }
