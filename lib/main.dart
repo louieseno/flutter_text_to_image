@@ -46,34 +46,44 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Mobile Slab"),
+          title: Text("Text to Image"),
           actions: [
-            OutlinedButton(
-              onPressed: _saveScreen,
-              child: Text(
-                "Save",
-                style: TextStyle(color: Colors.white),
-              ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                  onPressed: _saveScreen,
+                  child: Text(
+                    "Save",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.green),
+                  )),
             )
           ],
         ),
         body: Center(
-          child: ListView(
+          child: Column(
             children: <Widget>[
               RepaintBoundary(
                   key: _globalKey,
                   child: Center(
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 5.0),
+                      margin: const EdgeInsets.only(bottom: 5.0),
                       color: colorScheme,
                       width: double.infinity,
                       height: MediaQuery.of(context).size.height * 0.3,
-                      child: Text(
-                        _controller.text,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: fontFamily,
-                          fontSize: 50,
+                      child: Scrollbar(
+                        child: SingleChildScrollView(
+                          child: Text(
+                            _controller.text,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: fontFamily,
+                              fontSize: 50,
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -96,19 +106,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               // Input
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Hint Text',
-                    border: OutlineInputBorder(),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Hint Text',
+                      border: OutlineInputBorder(),
+                    ),
+                    controller: _controller,
+                    maxLines: null,
+                    keyboardType: TextInputType.multiline,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                   ),
-                  controller: _controller,
-                  maxLines: null,
-                  keyboardType: TextInputType.multiline,
-                  onChanged: (value) {
-                    setState(() {});
-                  },
                 ),
               )
             ],
@@ -125,9 +137,16 @@ class _MyHomePageState extends State<MyHomePage> {
     print(info);
   }
 
-  void _showSnackBar(content) {
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(content: Text(content)));
+  void _showSnackBar(String content, bool status) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: status ? Colors.green : Colors.redAccent,
+        content: Text(
+          content,
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
   }
 
   void _saveScreen() async {
@@ -140,14 +159,12 @@ class _MyHomePageState extends State<MyHomePage> {
       if (byteData != null) {
         final result =
             await ImageGallerySaver.saveImage(byteData.buffer.asUint8List());
-        if (result['isSuccess']) {
-          _showSnackBar('Image save!');
-        } else {
-          _showSnackBar('Image failed to save!');
-        }
+        final _status = result['isSuccess'];
+        _showSnackBar(
+            _status ? 'Image save!' : 'Image failed to save!', _status);
       }
     } catch (err) {
-      _showSnackBar(err.toString());
+      _showSnackBar(err.toString(), false);
     }
   }
 }
