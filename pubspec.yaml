@@ -43,9 +43,9 @@ flutter:
      - family: Alfa Slab One
        fonts:
            - asset: fonts/AlfaSlabOne-Regular.ttf
-     - family: Brush Stroke
+     - family: Heaters
        fonts:
-           - asset: fonts/BrushStroke-Plain.ttf
+           - asset: fonts/Heaters.otf
      - family: Squealer
        fonts:
            - asset: fonts/Squealer-Regular.ttf

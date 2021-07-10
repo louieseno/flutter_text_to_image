@@ -19,9 +19,7 @@ class ColorPickerController extends StatelessWidget {
           onTap: () => _showColorPickerDialog(
             context,
             color,
-            (color) {
-              onChange(Color(color.value));
-            },
+            (color) => onChange(Color(color.value)),
           ),
           child: ColorIndicator(
             color: color,

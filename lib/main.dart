@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:text_to_image/widgets/color_picker.dart';
+import 'package:text_to_image/widgets/font_picker.dart';
 
 void main() => runApp(MyApp());
 
@@ -29,7 +30,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   GlobalKey _globalKey = GlobalKey();
-  Color _colorScheme = Colors.amber;
+  Color colorScheme = Colors.amber;
+  String fontFamily = 'Roboto';
   late TextEditingController _controller;
 
   @override
@@ -45,6 +47,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Mobile Slab"),
+          actions: [
+            OutlinedButton(
+              onPressed: _saveScreen,
+              child: Text(
+                "Save",
+                style: TextStyle(color: Colors.white),
+              ),
+            )
+          ],
         ),
         body: Center(
           child: ListView(
@@ -53,42 +64,37 @@ class _MyHomePageState extends State<MyHomePage> {
                   key: _globalKey,
                   child: Center(
                     child: Container(
-                      color: _colorScheme,
+                      margin: EdgeInsets.only(bottom: 5.0),
+                      color: colorScheme,
                       width: double.infinity,
                       height: MediaQuery.of(context).size.height * 0.3,
                       child: Text(
                         _controller.text,
                         style: TextStyle(
                           color: Colors.white,
-                          fontFamily: 'Squealer',
+                          fontFamily: fontFamily,
                           fontSize: 50,
                         ),
                       ),
                     ),
                   )),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 30),
-                padding: const EdgeInsets.all(8.0),
-                child: Align(
-                  child: ElevatedButton(
-                    onPressed: _saveScreen,
-                    child: Text(
-                      "Save Image to Device",
-                      style: TextStyle(fontSize: 20.0),
-                    ),
-                  ),
-                ),
-              ),
               // Image Decorators
               ColorPickerController(
-                color: _colorScheme,
+                color: colorScheme,
                 onChange: (value) {
                   setState(() {
-                    _colorScheme = value;
+                    colorScheme = value;
                   });
                 },
               ),
-
+              FontPickerController(
+                font: fontFamily,
+                onChange: (value) {
+                  setState(() {
+                    fontFamily = value;
+                  });
+                },
+              ),
               // Input
               Padding(
                 padding: const EdgeInsets.all(8.0),
